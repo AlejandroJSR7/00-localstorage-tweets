@@ -1,6 +1,6 @@
 // Variables
 const listOfTweets = document.querySelector('#list-tweets');
-const tweet = document.querySelector('#tweet');
+const textareaTweet = document.querySelector('#tweet');
 tweet.focus();
 
 
@@ -19,15 +19,19 @@ function addTweet(e) {
 
   const li = document.createElement('li');
   const removeButton = document.createElement('a');
+  const tweet = textareaTweet.value;
+
   removeButton.classList = 'borrar-tweet';
   removeButton.innerHTML = 'X';
 
-  li.innerHTML = tweet.value;
+  li.innerHTML = tweet;
   li.appendChild(removeButton);
   listOfTweets.appendChild(li);
 
-  tweet.value = '';
-  tweet.focus();
+  textareaTweet.value = '';
+  textareaTweet.focus();
+
+  addTweetToLocalStorage(tweet);
 }
 
 function removeTweet(e) {
@@ -39,4 +43,20 @@ function removeTweet(e) {
     element.parentElement.remove();
   }
 
+}
+
+function addTweetToLocalStorage(tweet) {
+  let tweets;
+  tweets = getTweetsFromLocalStorage();
+  tweets.push(tweet);
+  localStorage.setItem('tweets', JSON.stringify(tweets));
+}
+function getTweetsFromLocalStorage() {
+  let tweets;
+  if (localStorage.getItem('tweets') === null) {
+    tweets = [];
+  } else {
+    tweets = JSON.parse(localStorage.getItem('tweets'));
+  }
+  return tweets;
 }
