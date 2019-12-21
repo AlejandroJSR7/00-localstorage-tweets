@@ -42,6 +42,7 @@ function removeTweet(e) {
 
   if (element.classList.contains('borrar-tweet')) {
     element.parentElement.remove();
+    removeTweetLocalStorage(element.parentElement.innerText);
   }
 
 }
@@ -61,6 +62,22 @@ function getTweetsFromLocalStorage() {
     tweets = JSON.parse(localStorage.getItem('tweets'));
   }
   return tweets;
+}
+function removeTweetLocalStorage(tweet) {
+  console.log('removeTweetLocalStorage', tweet)
+  let tweets, tweetToRemove;
+  // Remove X
+  tweetToRemove = tweet.substring(0, tweet.length - 1);
+  console.log('tweetToRemove', tweetToRemove)
+
+  tweets = getTweetsFromLocalStorage();
+
+  tweets.forEach((tweet, index) => {
+    if (tweetToRemove === tweet) {
+      tweets.splice(index, 1);
+    }
+  });
+  localStorage.setItem('tweets', JSON.stringify(tweets));
 }
 
 function addElementToHtml(tweet) {
