@@ -8,25 +8,26 @@ tweet.focus();
 eventListeners();
 
 function eventListeners() {
+  // Form Submit
   document.querySelector('#tweet-form').addEventListener('submit', addTweet);
+  // Remove Item
   listOfTweets.addEventListener('click', removeTweet);
+  // Load elements from LocalStorage to HTML
+  document.addEventListener('DOMContentLoaded', () => {
+    let tweets = getTweetsFromLocalStorage();
+    tweets.forEach(tweet => {
+      addElementToHtml(tweet)
+    });
+  })
 }
-
 
 // Functions
 function addTweet(e) {
   e.preventDefault();
 
-  const li = document.createElement('li');
-  const removeButton = document.createElement('a');
   const tweet = textareaTweet.value;
 
-  removeButton.classList = 'borrar-tweet';
-  removeButton.innerHTML = 'X';
-
-  li.innerHTML = tweet;
-  li.appendChild(removeButton);
-  listOfTweets.appendChild(li);
+  addElementToHtml(tweet);
 
   textareaTweet.value = '';
   textareaTweet.focus();
@@ -48,6 +49,7 @@ function removeTweet(e) {
 function addTweetToLocalStorage(tweet) {
   let tweets;
   tweets = getTweetsFromLocalStorage();
+  // Add the new tweet
   tweets.push(tweet);
   localStorage.setItem('tweets', JSON.stringify(tweets));
 }
@@ -59,4 +61,17 @@ function getTweetsFromLocalStorage() {
     tweets = JSON.parse(localStorage.getItem('tweets'));
   }
   return tweets;
+}
+
+function addElementToHtml(tweet) {
+  const li = document.createElement('li');
+  const removeButton = document.createElement('a');
+
+  removeButton.classList = 'borrar-tweet';
+  removeButton.innerText = 'X';
+
+  li.innerText = tweet;
+  li.appendChild(removeButton);
+  listOfTweets.appendChild(li);
+  return true;
 }
